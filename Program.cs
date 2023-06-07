@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using System.Collections.Generic;
 /*
 Challenge 1. Given a jagged array of integers (two dimensions).
 Find the common elements in the nested arrays.
@@ -255,12 +256,16 @@ class OrderItem : Product
 {
     public int Quantity { get; set; }
 
-    public OrderItem(Product product, int quantity) : base(product.Id, product.Price)
+    public OrderItem(Product product, int quantity) : base(Id, Price)
     {
         this.Quantity = quantity;
     }
 
     /* Override ToString() method so the item can be printed out conveniently with Id, Price, and Quantity */
+    public override string ToString()
+    {
+        return $"Product Id: {Id}, Product Price: {Price}, Product Quantity: {Quantity} ";
+    }
 }
 
 class Cart
@@ -268,20 +273,80 @@ class Cart
     private List<OrderItem> _cart { get; set; } = new List<OrderItem>();
 
     /* Write indexer property to get nth item from _cart */
+    public OrderItem this[int index] 
+    {
+        get 
+        { 
+            if(index>=0 && index <_cart.Count)
+            {
+                return _cart[index];
+            }
+            else 
+            {
+                throw new IndexOutOfRangeException("Invalid index");
+            }
+        }
+    }
 
     /* Write indexer property to get items of a range from _cart */
+    public List<OrderItem> this[int startIndex, int endIndex]
+    {
+        get
+        {
+            if(startIndex >= 0 && startIndex <= endIndex && endIndex < _cart.Count)
+            {
+                return _cart.GetRange(startIndex, endIndex - startIndex + 1);
+            }
+            else 
+            {
+                throw new IndexOutOfRangeException("Invalid range");
+            }
 
-    public void AddToCart(params OrderItem[] items)
+        }
+    }
+
+ 
+
+     public void AddToCart(params OrderItem[] items)
     {
         /* this method should check if each item exists --> increase value / or else, add item to cart */
+        foreach(var item in items)
+        {
+            var existsItem = _cart.Find(cartItem => item == cartItem);
+            if(existsItem != null)
+            {
+                existsItem.Quantity += item.Quantity;
+            }
+            else
+            {
+                _cart.Add(item);
+            }
+        }
     }
-    /* Write another method called Index */
+
+  
 
     /* Write another method called GetCartInfo(), which out put 2 values: 
     total price, total products in cart*/
+    public void GetCartInfo(out int totalPrice, out int totalQuantity)
+    {
+         totalPrice = 0;
+        totalQuantity = 0;
+
+        foreach (var item in _cart)
+        {
+            totalPrice += item.Price * item.Quantity;
+            totalQuantity += item.Quantity;
+        }
+
+    }
 
     /* Override ToString() method so Console.WriteLine(cart) can print
     id, unit price, unit quantity of each item*/
+    public override string ToString()
+    {
+        return string.Join(Environment.NewLine, _cart);
+    }
 
 }
 
