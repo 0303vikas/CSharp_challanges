@@ -10,23 +10,23 @@ Expected result: int[] {1,2} since 1 and 2 are both available in sub arrays.
 
 int[] CommonItems(int[][] jaggedArray)
 {
-   var repetativeArray = new List<int>();
+    var repetativeArray = new List<int>();
 
-   foreach (var item in jaggedArray[0])
-   {
-    if(Array.Exists( jaggedArray[1], element => element == item))
+    foreach (var item in jaggedArray[0])
     {
-        repetativeArray.Add(item);
-    }    
-   }
+        if (Array.Exists(jaggedArray[1], element => element == item))
+        {
+            repetativeArray.Add(item);
+        }
+    }
 
-   return repetativeArray.ToArray();
+    return repetativeArray.ToArray();
 }
 int[][] arr1 = { new int[] { 1, 2 }, new int[] { 2, 1, 5 } };
 int[] arr1Common = CommonItems(arr1);
 /* write method to print arr1Common */
 
-Console.WriteLine("int [] {0}",String.Join(",", arr1Common));
+Console.WriteLine("int [] {0}", String.Join(",", arr1Common));
 
 /* 
 Challenge 2. Inverse the elements of a jagged array.
@@ -34,8 +34,8 @@ For example, int[][] arr = {new int[] {1,2}, new int[]{1,2,3}}
 Expected result: int[][] arr = {new int[]{2, 1}, new int[]{3, 2, 1}}
 */
 void InverseJagged(int[][] jaggedArray)
-{   
-    for(int i = 0; i < jaggedArray.Length; i++) 
+{
+    for (int i = 0; i < jaggedArray.Length; i++)
     {
         Array.Reverse(jaggedArray[i]);
     }
@@ -43,8 +43,10 @@ void InverseJagged(int[][] jaggedArray)
 int[][] arr2 = { new int[] { 1, 2 }, new int[] { 1, 2, 3 } };
 InverseJagged(arr2);
 /* write method to print arr2 */
-for ( int i = 0; i< arr2.Length; i++ ) {
-    foreach(var j in arr2[i]){
+for (int i = 0; i < arr2.Length; i++)
+{
+    foreach (var j in arr2[i])
+    {
         Console.WriteLine(j + " ");
     }
     Console.WriteLine();
@@ -89,7 +91,7 @@ Expected result: {{1,4},{2,5},{3,6}}
 int[,] InverseRec(int[,] recArray)
 {
     int[,] updatedArray = new int[recArray.GetLength(1), recArray.GetLength(0)];
-    
+
     for (int i = 0; i < recArray.GetLength(0); i++)
     {
         for (int j = 0; j < recArray.GetLength(1); j++)
@@ -97,7 +99,7 @@ int[,] InverseRec(int[,] recArray)
             updatedArray[j, i] = recArray[i, j];
         }
     }
-    
+
     return updatedArray;
 }
 
@@ -124,13 +126,17 @@ string, number.
 Example: Demo("hello", 1, 2, "world") 
 Expected result: hello world; 3 */
 void Demo(params object[] values)
-{   
+{
     StringBuilder newString = new StringBuilder();
     int newNumber = 0;
-    foreach(var let in values){
-        if(let is string){
+    foreach (var let in values)
+    {
+        if (let is string)
+        {
             newString.Append(let);
-        } else if (let is int){
+        }
+        else if (let is int)
+        {
             newNumber += (int)let;
         }
     }
@@ -273,15 +279,15 @@ class Cart
     private List<OrderItem> _cart { get; set; } = new List<OrderItem>();
 
     /* Write indexer property to get nth item from _cart */
-    public OrderItem this[int index] 
+    public OrderItem this[int index]
     {
-        get 
-        { 
-            if(index>=0 && index <_cart.Count)
+        get
+        {
+            if (index >= 0 && index < _cart.Count)
             {
                 return _cart[index];
             }
-            else 
+            else
             {
                 throw new IndexOutOfRangeException("Invalid index");
             }
@@ -293,11 +299,11 @@ class Cart
     {
         get
         {
-            if(startIndex >= 0 && startIndex <= endIndex && endIndex < _cart.Count)
+            if (startIndex >= 0 && startIndex <= endIndex && endIndex < _cart.Count)
             {
                 return _cart.GetRange(startIndex, endIndex - startIndex + 1);
             }
-            else 
+            else
             {
                 throw new IndexOutOfRangeException("Invalid range");
             }
@@ -305,15 +311,15 @@ class Cart
         }
     }
 
- 
 
-     public void AddToCart(params OrderItem[] items)
+
+    public void AddToCart(params OrderItem[] items)
     {
         /* this method should check if each item exists --> increase value / or else, add item to cart */
-        foreach(var item in items)
+        foreach (var item in items)
         {
             var existsItem = _cart.Find(cartItem => item == cartItem);
-            if(existsItem != null)
+            if (existsItem != null)
             {
                 existsItem.Quantity += item.Quantity;
             }
@@ -324,13 +330,13 @@ class Cart
         }
     }
 
-  
+
 
     /* Write another method called GetCartInfo(), which out put 2 values: 
     total price, total products in cart*/
     public void GetCartInfo(out int totalPrice, out int totalQuantity)
     {
-         totalPrice = 0;
+        totalPrice = 0;
         totalQuantity = 0;
 
         foreach (var item in _cart)
@@ -345,7 +351,13 @@ class Cart
     id, unit price, unit quantity of each item*/
     public override string ToString()
     {
-        return string.Join(Environment.NewLine, _cart);
+        StringBuilder dataString = new StringBuilder();
+        foreach (var item in _cart)
+        {
+            dataString.Append($"/nId: {item.Id}, Price: {item.Price}, Quantity: {item.Quantity}/n");
+        }
+
+        return dataString.ToString();
     }
 
 }
